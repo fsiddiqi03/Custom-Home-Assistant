@@ -33,27 +33,13 @@ function getTemperatureBg(temp: number, unit: "F" | "C"): string {
   return "bg-red-500/10";
 }
 
-function formatTimeAgo(timestamp: string): string {
-  const now = new Date();
-  const then = new Date(timestamp);
-  const diffMs = now.getTime() - then.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-
-  if (diffMins < 1) return "Just now";
-  if (diffMins === 1) return "1 min ago";
-  if (diffMins < 60) return `${diffMins} mins ago`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours === 1) return "1 hour ago";
-  return `${diffHours} hours ago`;
-}
-
 export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
   if (error) {
     return (
       <Widget
         title="Temperature"
         icon={<Thermometer className="w-4 h-4" />}
-        className="min-w-[180px]"
+        className="min-w-[200px]"
       >
         <div className="text-center py-4">
           <p className="text-red-500 text-sm">{error}</p>
@@ -63,7 +49,7 @@ export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
   }
 
   return (
-    <Widget isLoading={isLoading} className="min-w-[180px]">
+    <Widget isLoading={isLoading} className="min-w-[200px]">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <div
@@ -97,7 +83,7 @@ export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
               {temperature.temp}°{temperature.unit}
             </p>
             <p className="text-xs text-foreground/50 mt-2">
-              Updated: {formatTimeAgo(temperature.timestamp)}
+              Updates every 15 seconds
             </p>
           </>
         ) : (

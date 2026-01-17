@@ -34,7 +34,7 @@ export function CalendarWidget({ events, isLoading, error }: CalendarWidgetProps
       <Widget
         title="Today's Schedule"
         icon={<Calendar className="w-4 h-4" />}
-        className="min-w-[250px]"
+        className="min-w-[350px] w-full lg:w-[380px]"
       >
         <div className="text-center py-4">
           <p className="text-red-500 text-sm">{error}</p>
@@ -47,7 +47,7 @@ export function CalendarWidget({ events, isLoading, error }: CalendarWidgetProps
   const pastEvents = events.filter((e) => isEventPast(e.end));
 
   return (
-    <Widget isLoading={isLoading} className="min-w-[250px]">
+    <Widget isLoading={isLoading} className="min-w-[350px] w-full lg:w-[380px]">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <div className="p-2 rounded-full bg-primary/10">
@@ -57,7 +57,7 @@ export function CalendarWidget({ events, isLoading, error }: CalendarWidgetProps
       </div>
 
       {/* Events list */}
-      <div className="space-y-3 max-h-[200px] overflow-y-auto">
+      <div className="space-y-3 max-h-[300px] overflow-y-auto">
         {events.length === 0 ? (
           <div className="text-center py-4">
             <p className="text-foreground/50 text-sm">No events today</p>

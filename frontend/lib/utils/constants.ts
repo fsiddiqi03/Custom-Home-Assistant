@@ -16,7 +16,7 @@ export const CAMERA_STREAM_URL =
 // Polling intervals (milliseconds)
 export const POLLING_INTERVALS = {
   LIGHTS: 30000, // 30 seconds
-  TEMPERATURE: 60000, // 60 seconds
+  TEMPERATURE: 15000, // 15 seconds
   STATS: 15000, // 15 seconds
   CALENDAR: 900000, // 15 minutes
 } as const;

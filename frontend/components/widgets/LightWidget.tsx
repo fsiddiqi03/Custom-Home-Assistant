@@ -111,7 +111,7 @@ export function LightWidget({
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-foreground/60">Brightness</span>
-          <span className="text-foreground font-medium">{localBrightness}%</span>
+          <span className="text-foreground font-medium">{Math.round(localBrightness)}%</span>
         </div>
         <Slider
           value={localBrightness}
