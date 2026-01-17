@@ -5,6 +5,7 @@
  * Displays current temperature with color indicator
  */
 
+import { useState, useEffect } from "react";
 import { Thermometer } from "lucide-react";
 import { Widget } from "./Widget";
 import { cn } from "@/lib/utils/cn";
@@ -14,6 +15,25 @@ interface TempWidgetProps {
   temperature: Temperature | null;
   isLoading?: boolean;
   error?: string;
+}
+
+function getRelativeTime(timestamp: string): string {
+  const now = Date.now();
+  const then = new Date(timestamp).getTime();
+  const diffInSeconds = Math.floor((now - then) / 1000);
+
+  if (diffInSeconds < 0) return "just now";
+  if (diffInSeconds === 0) return "just now";
+  if (diffInSeconds === 1) return "1 second ago";
+  if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+  
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes === 1) return "1 minute ago";
+  if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+  
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours === 1) return "1 hour ago";
+  return `${diffInHours} hours ago`;
 }
 
 function getTemperatureColor(temp: number, unit: "F" | "C"): string {
@@ -34,12 +54,29 @@ function getTemperatureBg(temp: number, unit: "F" | "C"): string {
 }
 
 export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
+  const [relativeTime, setRelativeTime] = useState<string>("");
+
+  // Update relative time every second
+  useEffect(() => {
+    if (!temperature?.timestamp) return;
+
+    // Initial calculation
+    setRelativeTime(getRelativeTime(temperature.timestamp));
+
+    // Update every second
+    const interval = setInterval(() => {
+      setRelativeTime(getRelativeTime(temperature.timestamp));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [temperature?.timestamp]);
+
   if (error) {
     return (
       <Widget
         title="Temperature"
         icon={<Thermometer className="w-4 h-4" />}
-        className="min-w-[200px]"
+        className="min-w-[200px] min-h-[180px]"
       >
         <div className="text-center py-4">
           <p className="text-red-500 text-sm">{error}</p>
@@ -49,7 +86,7 @@ export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
   }
 
   return (
-    <Widget isLoading={isLoading} className="min-w-[200px]">
+    <Widget isLoading={isLoading} className="min-w-[200px] min-h-[180px] flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
         <div
@@ -60,18 +97,18 @@ export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
         >
           <Thermometer
             className={cn(
-              "w-4 h-4",
+              "w-5 h-5",
               temperature
                 ? getTemperatureColor(temperature.temp, temperature.unit)
                 : "text-foreground/60"
             )}
           />
         </div>
-        <span className="text-sm font-medium text-foreground/80">Temperature</span>
+        <span className="font-medium text-foreground">Temperature</span>
       </div>
 
-      {/* Temperature display */}
-      <div className="text-center py-2">
+      {/* Temperature display - flex-grow to fill available space */}
+      <div className="flex-grow flex flex-col justify-center text-center">
         {temperature ? (
           <>
             <p
@@ -82,8 +119,8 @@ export function TempWidget({ temperature, isLoading, error }: TempWidgetProps) {
             >
               {temperature.temp}°{temperature.unit}
             </p>
-            <p className="text-xs text-foreground/50 mt-2">
-              Updates every 15 seconds
+            <p className="text-xs text-foreground/50 mt-3">
+              Updated {relativeTime || "just now"}
             </p>
           </>
         ) : (
