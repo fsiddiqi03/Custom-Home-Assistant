@@ -42,8 +42,8 @@ export function Dock() {
   const { isEditMode, toggleEditMode } = useEditMode();
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-      <div className="flex items-center gap-2 px-4 py-3 bg-card/80 backdrop-blur-lg border border-border rounded-2xl shadow-lg">
+    <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50">
+      <div className="flex items-center gap-3 px-6 py-2 bg-card/80 backdrop-blur-lg border border-border rounded-full shadow-lg">
         {dockItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -53,7 +53,7 @@ export function Dock() {
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all",
+                "group flex items-center gap-2 px-3 py-1.5 rounded-full transition-all",
                 "hover:bg-background",
                 isActive && "bg-primary/10"
               )}
@@ -61,7 +61,7 @@ export function Dock() {
             >
               <Icon
                 className={cn(
-                  "w-6 h-6 transition-colors",
+                  "w-5 h-5 transition-colors",
                   isActive ? "text-primary" : "text-foreground/60 group-hover:text-foreground"
                 )}
               />
@@ -78,23 +78,23 @@ export function Dock() {
         })}
 
         {/* Divider */}
-        <div className="w-px h-12 bg-border mx-1" />
+        <div className="w-px h-6 bg-border" />
 
         {/* Edit Mode Toggle - only show on home page */}
         {pathname === ROUTES.HOME && (
           <button
             onClick={toggleEditMode}
             className={cn(
-              "flex flex-col items-center gap-1 px-3 py-2 rounded-xl transition-all",
+              "flex items-center gap-2 px-3 py-1.5 rounded-full transition-all",
               "hover:bg-background",
               isEditMode && "bg-primary/10"
             )}
             aria-label={isEditMode ? "Done editing" : "Edit layout"}
           >
             {isEditMode ? (
-              <Check className="w-6 h-6 text-green-500" />
+              <Check className="w-5 h-5 text-green-500" />
             ) : (
-              <Pencil className="w-6 h-6 text-foreground/60 hover:text-foreground" />
+              <Pencil className="w-5 h-5 text-foreground/60 hover:text-foreground" />
             )}
             <span
               className={cn(
@@ -108,7 +108,7 @@ export function Dock() {
         )}
 
         {/* Theme Toggle */}
-        <div className="flex items-center px-2">
+        <div className="flex items-center">
           <ThemeToggle />
         </div>
       </div>

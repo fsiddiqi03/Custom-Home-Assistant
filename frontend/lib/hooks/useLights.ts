@@ -21,7 +21,7 @@ export function useLights() {
   );
 
   const toggleLight = async (id: string, state: "on" | "off") => {
-    // Optimistic update
+    // Optimistic update - set the new state immediately
     const optimisticData = data
       ? {
           lights: data.lights.map((light) =>
@@ -42,13 +42,13 @@ export function useLights() {
           throw new Error("Failed to toggle light");
         }
 
-        // Return current data to trigger a revalidation
-        return data;
+        // Return the optimistic data to keep the state stable (no revalidation flicker)
+        return optimisticData;
       },
       {
         optimisticData,
         rollbackOnError: true,
-        revalidate: true,
+        revalidate: false, // Don't revalidate after success - keep the optimistic state
       }
     );
   };
@@ -75,12 +75,13 @@ export function useLights() {
           throw new Error("Failed to set brightness");
         }
 
-        return data;
+        // Return the optimistic data to keep the state stable
+        return optimisticData;
       },
       {
         optimisticData,
         rollbackOnError: true,
-        revalidate: true,
+        revalidate: false, // Don't revalidate after success - keep the optimistic state
       }
     );
   };
